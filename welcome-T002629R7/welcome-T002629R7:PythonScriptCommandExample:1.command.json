@@ -1,0 +1,54 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "scriptInput",
+        "valueFrom": {
+          "inputReference": "welcome-<<<TENANT_ID>>>:WelcomeScriptInput:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "welcomeScriptOutput": "$(.welcomeScriptExecutor.output.output)"
+    },
+    "executors": [
+      {
+        "execute": "scripts-sapcp:ExecuteScript:1",
+        "input": {
+          "stdin": "$(.scriptInput.stdin | toBase64)",
+          "environment": "$(.scriptInput.environment)",
+          "parameters": "$(.scriptInput.parameters)",
+          "script": "IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwoKaW1wb3J0IHN5cywgb3MKCnN0ZGluID0gc3lzLnN0ZGluLnJlYWRsaW5lKCkKZW52ID0gb3MuZW52aXJvbi5nZXQoIkdSRUVUSU5HIikKKGFyZzEsIGFyZzIpID0gc3lzLmFyZ3ZbMTozXQoKcHJpbnQoZiJ7ZW52fXthcmcxfSB7c3RkaW59e2FyZzJ9IikK"
+        },
+        "alias": "welcomeScriptExecutor",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:PythonScriptCommandExample:1",
+  "name": "PythonScriptCommandExample",
+  "description": "Example Python 3 script execution command",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "welcomeScriptOutput": {
+      "type": "string",
+      "sensitive": false,
+      "description": "welcomeScript output value"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

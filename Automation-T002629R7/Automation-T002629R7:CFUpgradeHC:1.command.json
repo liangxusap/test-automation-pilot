@@ -1,0 +1,156 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "CFUser",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:CFTechnicalUser:1",
+          "inputKey": null
+        }
+      },
+      {
+        "alias": "CFInstanceDetails",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:CFInstanceDetails:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "availableUpgradeVersions": "$(.getParams.output.parameters.availableUpgradeVersions)",
+      "appliedVersion": "$(.generateJSON.output.output[0])",
+      "previousProductVersion": "$(.getParams.output.parameters.currentProductVersion)"
+    },
+    "executors": [
+      {
+        "execute": "cf-sapcp:GetCfServiceInstance:1",
+        "input": {
+          "password": "$(.CFUser.password)",
+          "org": "$(.CFInstanceDetails.subAccount)",
+          "serviceInstance": "$(.CFInstanceDetails.resourceName)",
+          "region": "$(.CFInstanceDetails.region)",
+          "user": "$(.CFUser.user)",
+          "includeParameters": "true",
+          "space": "$(.CFInstanceDetails.resourceGroup)"
+        },
+        "alias": "getParams",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.getParams.output.parameters.availableUpgradeVersions) | length",
+                  "operator": "GREATER_THAN",
+                  "semantic": "OR",
+                  "values": [
+                    "0"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [
+          {
+            "message": "No patches or updates found",
+            "when": {
+              "semantic": "OR",
+              "conditions": [
+                {
+                  "semantic": "OR",
+                  "cases": [
+                    {
+                      "expression": "$(.execution.error.originalMessage)",
+                      "operator": "STARTS_WITH",
+                      "semantic": "OR",
+                      "values": [
+                        "Validation"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "dryRun": null
+      },
+      {
+        "execute": "scripts-sapcp:ExecuteScript:2",
+        "input": {
+          "stdin": "$(.getParams.output.parameters)",
+          "script": "#!/usr/bin/env python3\n\nimport json\nimport sys\n\ninput = sys.stdin.read()\nparameters = json.loads(input)\n\n#There is only ever the latest patch per QRC\n#There can be up to two QRCs\n#So at most there could be two patches and two QRCs\n#For simplicity, select the first entry in the list of availableUpgradeVersions\n#Logic could be added here to: \n#  favour QRC upgrades over patches or vice versa\n#  Check the expirationDate of the currentProductVersion\n\nversionParameter= {'data': {'productVersion': {'releaseCycle':'generally-available-quarterly', 'track': parameters['availableUpgradeVersions'][0]['track'], 'id': parameters['availableUpgradeVersions'][0]['id']} } }\n\nprint(json.dumps(versionParameter))"
+        },
+        "alias": "generateJSON",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "cf-sapcp:UpdateCfServiceInstance:1",
+        "input": {
+          "password": "$(.CFUser.password) ",
+          "org": "$(.CFInstanceDetails.subAccount) ",
+          "serviceInstance": "$(.CFInstanceDetails.resourceName) ",
+          "region": "$(.CFInstanceDetails.region) ",
+          "user": "$(.CFUser.user)",
+          "parameters": "$(.generateJSON.output.output[0])",
+          "space": "$(.CFInstanceDetails.resourceGroup) "
+        },
+        "alias": "upgrade",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "Automation-<<<TENANT_ID>>>:CFUpgradeHC:1",
+  "name": "CFUpgradeHC",
+  "description": "Upgrade an SAP HANA Cloud Instance provisioned in Cloud Foundry",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "availableUpgradeVersions": {
+      "type": "string",
+      "sensitive": false,
+      "description": null
+    },
+    "appliedVersion": {
+      "type": "string",
+      "sensitive": false,
+      "description": null
+    },
+    "previousProductVersion": {
+      "type": "string",
+      "sensitive": false,
+      "description": null
+    }
+  },
+  "tags": {},
+  "issues": null
+}

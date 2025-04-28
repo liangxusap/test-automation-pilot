@@ -1,0 +1,7 @@
+{
+  "id": "Automation-<<<TENANT_ID>>>",
+  "technicalName": "Automation",
+  "name": "Automation",
+  "description": "Collection of commands to demonstrate automating tasks in SAP HANA Cloud",
+  "owner": "<<<TENANT_ID>>>"
+}

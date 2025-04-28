@@ -1,0 +1,19 @@
+{
+  "id": "welcome-<<<TENANT_ID>>>:ApplicationsStatus:1",
+  "name": "ApplicationsStatus",
+  "description": null,
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "applications": {
+      "type": "array",
+      "sensitive": false,
+      "description": null
+    }
+  },
+  "values": {
+    "applications": " [{\"applicationName\":\"app1\",\"status\":\"RUNNING\"},{\"applicationName\":\"app2\",\"status\":\"FAILED\"},{\"applicationName\":\"app3\",\"status\":\"STOPPED\"},{\"applicationName\":\"app4\",\"status\":\"RUNNING\"},{\"applicationName\":\"app5\",\"status\":\"RUNNING\"}]"
+  },
+  "tags": {}
+}

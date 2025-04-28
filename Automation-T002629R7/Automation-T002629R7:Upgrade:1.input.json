@@ -1,0 +1,19 @@
+{
+  "id": "Automation-<<<TENANT_ID>>>:Upgrade:1",
+  "name": "Upgrade",
+  "description": "Upgrade JSON for an SAP HANA Cloud instance",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "parameters": {
+      "type": "object",
+      "sensitive": false,
+      "description": "JSON parameter to upgrade an instance in the subaccount"
+    }
+  },
+  "values": {
+    "parameters": "{\n   \"data\": {\n     \"productVersion\": {\n         \"releaseCycle\":\"generally-available-quarterly\",\n         \"track\": \"2023.40\",\n         \"id\": \"2023.40.7\"\n     }\n   }\n}\n"
+  },
+  "tags": {}
+}

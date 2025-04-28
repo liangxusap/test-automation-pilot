@@ -1,0 +1,19 @@
+{
+  "id": "Automation-<<<TENANT_ID>>>:Start:1",
+  "name": "Start",
+  "description": "Start JSON for an SAP HANA Cloud instance",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "parameters": {
+      "type": "object",
+      "sensitive": false,
+      "description": "JSON parameter to start an SAP HANA Cloud instance"
+    }
+  },
+  "values": {
+    "parameters": "{\n    \"data\": {\n        \"serviceStopped\": false\n    }\n}"
+  },
+  "tags": {}
+}

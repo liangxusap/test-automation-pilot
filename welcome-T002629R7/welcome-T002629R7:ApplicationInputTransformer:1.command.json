@@ -1,0 +1,126 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "resourceName": "$(.void.output.message | toObject | .resourceName)",
+      "region": "$(.void.output.message | toObject | .region)",
+      "subAccount": "$(.void.output.message | toObject | .subAccount)",
+      "status": "$(.void.output.message | toObject | .status)"
+    },
+    "executors": [
+      {
+        "execute": "utils-sapcp:Void:1",
+        "input": {
+          "message": "{\"resourceName\":\"$(.execution.input.applicationName)\",\"status\":\"$(.execution.input.status)\",\"subAccount\":\"$(.execution.input.subAccount)\",\"region\":\"$(.execution.input.region)\"}"
+        },
+        "alias": "void",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:ApplicationInputTransformer:1",
+  "name": "ApplicationInputTransformer",
+  "description": "Change ApplicationsInput format",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {
+    "region": {
+      "type": "string",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo region (as defined by Alert Notification Service), e.g. neo-eu1, neo-us1, etc."
+    },
+    "subAccount": {
+      "type": "string",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo subaccount, e.g.: abc123456."
+    },
+    "applicationName": {
+      "type": "string",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Application's name"
+    },
+    "status": {
+      "type": "string",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Application's status e.g. :RUNNING, FAILED, STOPPED."
+    }
+  },
+  "outputKeys": {
+    "resourceName": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Application's name"
+    },
+    "region": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Technical name of a SAP CP Neo region (as defined by Alert Notification Service), e.g. neo-eu1, neo-us1, etc."
+    },
+    "subAccount": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Technical name of a SAP CP Neo subaccount, e.g.: abc123456"
+    },
+    "status": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Application's status e.g. :RUNNING, FAILED, STOPPED."
+    }
+  },
+  "tags": {},
+  "issues": null
+}

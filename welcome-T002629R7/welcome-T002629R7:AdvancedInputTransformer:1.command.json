@@ -1,0 +1,76 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "tasksAndEmails": "$(.matchTasksAndEmails.output.message | toArray)"
+    },
+    "executors": [
+      {
+        "execute": "utils-sapcp:Void:1",
+        "input": {
+          "message": "$( [ { task: .execution.input.tasks[ ], user: .execution.input.users[ ] } ] | filter(.task.assignee == .user.id) | filter(.task.status != \"DONE\") | map({ assigneeEmail: .user.email, taskId: .task.id, taskStatus: .task.status }) )"
+        },
+        "alias": "matchTasksAndEmails",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:AdvancedInputTransformer:1",
+  "name": "AdvancedInputTransformer",
+  "description": "Filters out the completed tasks and matches the remaining to the corresponding assignee's email address",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {
+    "users": {
+      "type": "array",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": "[{\"id\":\"11\",\"name\":\"Jon Doe\",\"email\":\"jon.doe@example.com\"},{\"id\":\"12\",\"name\":\"Jane Doe\",\"email\":\"jane.doe@example.com\"}]",
+      "defaultValueFromInput": null,
+      "description": "List of JSON objects with the following keys: id, name and email"
+    },
+    "tasks": {
+      "type": "array",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": "[{\"id\":\"1023\",\"title\":\"Update DB\",\"assignee\":\"11\",\"status\":\"DONE\"},{\"id\":\"1024\",\"title\":\"Update Java Library\",\"assignee\":\"12\",\"status\":\"DONE\"},{\"id\":\"1025\",\"title\":\"Check Code Scans\",\"assignee\":\"12\",\"status\":\"IN PROGRESS\"},{\"id\":\"1026\",\"title\":\"Fix Bug #23\",\"assignee\":\"11\",\"status\":\"IN PROGRESS\"}]",
+      "defaultValueFromInput": null,
+      "description": "List of JSON objects with the following keys: id, assignee, title and status"
+    }
+  },
+  "outputKeys": {
+    "tasksAndEmails": {
+      "type": "array",
+      "sensitive": false,
+      "description": "List of JSON objects with the following keys: taskId, taskStatus and assigneeEmail"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

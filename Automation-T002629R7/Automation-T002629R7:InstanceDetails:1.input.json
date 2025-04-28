@@ -1,0 +1,43 @@
+{
+  "id": "Automation-<<<TENANT_ID>>>:InstanceDetails:1",
+  "name": "InstanceDetails",
+  "description": "The details of an SAP HANA Cloud Instance deployed to an SAP BTP subaccount",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "instanceId": {
+      "type": "string",
+      "sensitive": false,
+      "description": "The instance ID"
+    },
+    "instanceName": {
+      "type": "string",
+      "sensitive": false,
+      "description": "The name of an SAP HANA Cloud instance"
+    },
+    "instanceBindingKey": {
+      "type": "object",
+      "sensitive": false,
+      "description": "An optional binding key on an SAP HANA Cloud Instance used to access alerts and metrics"
+    },
+    "servicePlanId": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Required for MassUpgradeHC when attempting to get a  list of all the SAP HANA Cloud database instances in a subaccount.  Obtained via btp list services/plan --fields-filter \"name contains 'hana'\" "
+    },
+    "smBindingKey": {
+      "type": "object",
+      "sensitive": false,
+      "description": "An optional binding key from a service manager instance used to perform management tasks against multiple instances in a BTP subaccount."
+    }
+  },
+  "values": {
+    "instanceId": "b00eac16-5486-4f27-a52b-359f250273c3",
+    "instanceName": "HC_HDB",
+    "instanceBindingKey": "{}",
+    "servicePlanId": "e573479c-39f8-4774-80a9-12d762b0f159",
+    "smBindingKey": "{}"
+  },
+  "tags": {}
+}

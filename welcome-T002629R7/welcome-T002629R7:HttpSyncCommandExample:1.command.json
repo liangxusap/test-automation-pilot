@@ -1,0 +1,50 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "body": "$(.syncHttpRequest.output.body)",
+      "statusCode": "$(.syncHttpRequest.output.status)"
+    },
+    "executors": [
+      {
+        "execute": "http-sapcp:HttpRequest:1",
+        "input": {
+          "method": "GET",
+          "url": "https://us-central1-sap-clm-sl-actions-dev.cloudfunctions.net/trace-http-request"
+        },
+        "alias": "syncHttpRequest",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:HttpSyncCommandExample:1",
+  "name": "HttpSyncCommandExample",
+  "description": "Example of sync http request execution",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "body": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Http's response body"
+    },
+    "statusCode": {
+      "type": "number",
+      "sensitive": false,
+      "description": "Http's response code"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

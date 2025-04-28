@@ -1,0 +1,64 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "CFUser",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:CFTechnicalUser:1",
+          "inputKey": null
+        }
+      },
+      {
+        "alias": "CFInstanceDetails",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:CFInstanceDetails:1",
+          "inputKey": null
+        }
+      },
+      {
+        "alias": "description",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:Description:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {},
+    "executors": [
+      {
+        "execute": "cf-sapcp:UpdateCfServiceInstance:1",
+        "input": {
+          "password": "$(.CFUser.password)",
+          "org": "$(.CFInstanceDetails.subAccount)",
+          "serviceInstance": "$(.CFInstanceDetails.resourceName)",
+          "region": "$(.CFInstanceDetails.region)",
+          "deadline": "30",
+          "user": "$(.CFUser.user)",
+          "parameters": "$(.description.parameters)",
+          "space": "$(.CFInstanceDetails.resourceGroup)"
+        },
+        "alias": "CFUpdateHC",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "Automation-<<<TENANT_ID>>>:CFUpdateHC:1",
+  "name": "CFUpdateHC",
+  "description": "Update the description of an SAP HANA Cloud Instance provisioned in Cloud Foundry",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {},
+  "tags": {},
+  "issues": null
+}

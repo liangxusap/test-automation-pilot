@@ -1,0 +1,7 @@
+{
+  "id": "RA-<<<TENANT_ID>>>",
+  "technicalName": "RA",
+  "name": "Recommended Actions",
+  "description": "This catalog contains 'Recommended Actions'",
+  "owner": "<<<TENANT_ID>>>"
+}

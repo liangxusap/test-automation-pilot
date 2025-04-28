@@ -1,0 +1,53 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "InstanceDetails",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:InstanceDetails:1",
+          "inputKey": null
+        }
+      },
+      {
+        "alias": "stop",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:Stop:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {},
+    "executors": [
+      {
+        "execute": "sm-sapcp:UpdateServiceInstance:1",
+        "input": {
+          "instanceId": "$(.InstanceDetails.instanceId)",
+          "displayName": "$(.InstanceDetails.instanceName)",
+          "serviceKey": "$(.InstanceDetails.smBindingKey)",
+          "parameters": "$(.stop.parameters)"
+        },
+        "alias": "update",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "Automation-<<<TENANT_ID>>>:StopHC:1",
+  "name": "StopHC",
+  "description": "Stop an SAP HANA Cloud instance provisioned to an SAP BTP subaccount",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {},
+  "tags": {},
+  "issues": null
+}

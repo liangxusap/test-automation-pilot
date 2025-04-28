@@ -1,0 +1,52 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "InstanceDetails",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:InstanceDetails:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "CommandOutput": "$(.getDetails.output.parameters)"
+    },
+    "executors": [
+      {
+        "execute": "sm-sapcp:GetServiceInstanceParameters:1",
+        "input": {
+          "instanceId": "$(.InstanceDetails.instanceId)",
+          "serviceKey": "$(.InstanceDetails.smBindingKey)"
+        },
+        "alias": "getDetails",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "Automation-<<<TENANT_ID>>>:GetInstanceParameters:1",
+  "name": "GetInstanceParameters",
+  "description": "Get the instance parameter details",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "CommandOutput": {
+      "type": "object",
+      "sensitive": false,
+      "description": "Instance parameters"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

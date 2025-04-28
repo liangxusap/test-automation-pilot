@@ -1,0 +1,193 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "output": "$(.pollAsyncOperation.output.body)"
+    },
+    "executors": [
+      {
+        "execute": "http-sapcp:HttpRequest:1",
+        "input": {
+          "method": "POST",
+          "url": "https://us-central1-sap-clm-sl-actions-dev.cloudfunctions.net/start-async-operation",
+          "timeout": "5"
+        },
+        "alias": "startAsyncOperation",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": {
+          "message": "Please, resume the process",
+          "when": {
+            "semantic": "OR",
+            "conditions": [
+              {
+                "semantic": "OR",
+                "cases": [
+                  {
+                    "expression": "$(.execution.input.pause)",
+                    "operator": "EQUALS",
+                    "semantic": "OR",
+                    "values": [
+                      "true"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "when": null,
+        "validate": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.startAsyncOperation.output.body)",
+                  "operator": "CONTAINS",
+                  "semantic": "AND",
+                  "values": [
+                    "id",
+                    "status"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "autoRetry": {
+          "maxCount": 2,
+          "delay": "5s",
+          "logic": "INCREMENTAL",
+          "applyOnValidation": false,
+          "when": null
+        },
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "http-sapcp:HttpRequest:1",
+        "input": {
+          "method": "GET",
+          "url": "https://us-central1-sap-clm-sl-actions-dev.cloudfunctions.net/check-async-operation?id=$(.startAsyncOperation.output.body | toObject | .id)",
+          "timeout": "5"
+        },
+        "alias": "pollAsyncOperation",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": {
+          "interval": "5s",
+          "when": null
+        },
+        "pause": null,
+        "when": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.startAsyncOperation.output.body | toObject | .status)",
+                  "operator": "NOT_EQUALS",
+                  "semantic": "AND",
+                  "values": [
+                    "FINISHED",
+                    "finished"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "validate": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.pollAsyncOperation.output.body)",
+                  "operator": "CONTAINS",
+                  "semantic": "AND",
+                  "values": [
+                    "id",
+                    "status"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "autoRetry": {
+          "maxCount": 2,
+          "delay": "5s",
+          "logic": "INCREMENTAL",
+          "applyOnValidation": false,
+          "when": null
+        },
+        "repeat": {
+          "maxCount": 10,
+          "until": {
+            "semantic": "OR",
+            "conditions": [
+              {
+                "semantic": "OR",
+                "cases": [
+                  {
+                    "expression": "$(.pollAsyncOperation.output.body | toObject | .status)",
+                    "operator": "EQUALS",
+                    "semantic": "OR",
+                    "values": [
+                      "FINISHED",
+                      "finished"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "delay": "5s",
+          "failOnMaxCount": true
+        },
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:HttpAsyncCommandExample:1",
+  "name": "HttpAsyncCommandExample",
+  "description": "Example of async http request trigger & poll",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {
+    "pause": {
+      "type": "boolean",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": "false",
+      "defaultValueFromInput": null,
+      "description": "Used to pause the command execution at the very beginning"
+    }
+  },
+  "outputKeys": {
+    "output": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Response's from the poll http operation"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

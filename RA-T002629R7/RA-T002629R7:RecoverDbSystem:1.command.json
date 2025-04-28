@@ -1,0 +1,324 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "healthOverviewAfterRecovery": "$(.healthMsgAfterRecovery.output.message)",
+      "healthOverviewBeforeRecovery": "$(.healthMsgBeforeRecovery.output.message)",
+      "operatorChoice": "$(.getOperatorDecision.output.selection)"
+    },
+    "executors": [
+      {
+        "execute": "monitoring-sapcp:DbSystemHealthOverview:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "clientId": "$(.execution.input.clientId)",
+          "resourceName": "$(.execution.input.resourceName)",
+          "clientSecret": "$(.execution.input.clientSecret)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "healthBeforeRecovery",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:Void:1",
+        "input": {
+          "message": "- DB Accessible: $(.healthBeforeRecovery.output.dbAccessible)  - VM Accessible: $(.healthBeforeRecovery.output.vmAccessible)  - HA Enabled: $(.healthBeforeRecovery.output.haEnabled)  - DR Enabled: $(.healthBeforeRecovery.output.drEnabled)  - Takeover Running: $(.healthBeforeRecovery.output.takeoverRunning)  - Maintenance Enabled: $(.healthBeforeRecovery.output.maintenanceEnabled)  - Needs VM Restart: $(.healthBeforeRecovery.output.needVmRestart)  - System Locked: $(.healthBeforeRecovery.output.systemLocked)  - Transactions Count: $(.healthBeforeRecovery.output.transactionsCount)  - Blocked Transactions: $(.healthBeforeRecovery.output.blockedTransactionsCount)  - Replication Running: $(.healthBeforeRecovery.output.replicationRunning)  - Active Replication: $(.healthBeforeRecovery.output.activeReplication)  - Backups Status: $(.healthBeforeRecovery.output.backupsStatus)  - Volumes Usage: $(.healthBeforeRecovery.output.volumesUsage)  - Critical Neo Monitoring Metrics: $(.healthBeforeRecovery.output.metrics)"
+        },
+        "alias": "healthMsgBeforeRecovery",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:GetUserChoice:1",
+        "input": {
+          "options": "{\"restart\":\"Restart Db System : $(.execution.input.resourceName)\", \"restartAndRecheck\":\"Restart Db System : $(.execution.input.resourceName) & Check Its Health Again\", \"doNothing\":\"Do Nothing\"}",
+          "title": "Confirm the next steps, based on the current db system health! IMPORTANT: $(.healthMsgBeforeRecovery.output.message)"
+        },
+        "alias": "getOperatorDecision",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "dblm-sapcp:RestartDbSystem:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "resourceName": "$(.execution.input.resourceName)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "restartDbSystem",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.getOperatorDecision.output.selection)",
+                  "operator": "EQUALS",
+                  "semantic": "OR",
+                  "values": [
+                    "restart",
+                    "restartAndRecheck"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "monitoring-sapcp:DbSystemHealthOverview:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "clientId": "$(.execution.input.clientId)",
+          "resourceName": "$(.execution.input.resourceName)",
+          "clientSecret": "$(.execution.input.clientSecret)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "healthAfterRecovery",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.getOperatorDecision.output.selection)",
+                  "operator": "EQUALS",
+                  "semantic": "OR",
+                  "values": [
+                    "restartAndRecheck"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:Void:1",
+        "input": {
+          "message": "- DB Accessible: $(.healthAfterRecovery.output.dbAccessible)  - VM Accessible: $(.healthAfterRecovery.output.vmAccessible)  - HA Enabled: $(.healthAfterRecovery.output.haEnabled)  - DR Enabled: $(.healthAfterRecovery.output.drEnabled)  - Takeover Running: $(.healthAfterRecovery.output.takeoverRunning)  - Maintenance Enabled: $(.healthAfterRecovery.output.maintenanceEnabled)  - Needs VM Restart: $(.healthAfterRecovery.output.needVmRestart)  - System Locked: $(.healthAfterRecovery.output.systemLocked)  - Transactions Count: $(.healthAfterRecovery.output.transactionsCount)  - Blocked Transactions: $(.healthAfterRecovery.output.blockedTransactionsCount)  - Replication Running: $(.healthAfterRecovery.output.replicationRunning)  - Active Replication: $(.healthAfterRecovery.output.activeReplication)  - Backups Status: $(.healthAfterRecovery.output.backupsStatus)  - Volumes Usage: $(.healthAfterRecovery.output.volumesUsage)  - Critical Neo Monitoring Metrics: $(.healthAfterRecovery.output.metrics)"
+        },
+        "alias": "healthMsgAfterRecovery",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.getOperatorDecision.output.selection)",
+                  "operator": "EQUALS",
+                  "semantic": "OR",
+                  "values": [
+                    "restartAndRecheck"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "RA-<<<TENANT_ID>>>:RecoverDbSystem:1",
+  "name": "RecoverDbSystem",
+  "description": "Used to gather db system health and recover the system based on the operator's decision",
+  "catalog": "RA-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {
+    "password": {
+      "type": "string",
+      "sensitive": true,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "User's password used for authentication to SAP CP Neo APIs via basic authentication"
+    },
+    "clientId": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "SAP CP Neo Platform API oAuth 2.0 client id with read monitoring data scopes, e.g. e4bbc653-abef-375f-a681-c1dac12341234"
+    },
+    "resourceName": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Name of the SAP CP Neo database system, e.g. f45"
+    },
+    "clientSecret": {
+      "type": "string",
+      "sensitive": true,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "SAP CP Neo Platform API oAuth 2.0 client secret for the specified client id, e.g. abcdc1dac12341234"
+    },
+    "region": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo region (as defined by Alert Notification Service), e.g. neo-eu1, neo-us1, etc."
+    },
+    "user": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Username used for authentication to SAP CP Neo APIs via basic authentication"
+    },
+    "subAccount": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo subaccount, e.g.: abc123456"
+    }
+  },
+  "outputKeys": {
+    "healthOverviewAfterRecovery": {
+      "type": "string",
+      "sensitive": false,
+      "description": "DB's health after the recovery procedure"
+    },
+    "healthOverviewBeforeRecovery": {
+      "type": "string",
+      "sensitive": false,
+      "description": "DB's health before the recovery procedure"
+    },
+    "operatorChoice": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Operator's decision if DB recovery is required"
+    }
+  },
+  "tags": {
+    "env": "neo"
+  },
+  "issues": null
+}

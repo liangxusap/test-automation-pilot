@@ -1,0 +1,180 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "name": "$(.db.output.data | toArray | .[0] | toObject | .dbSystemName)",
+      "type": "$(.db.output.data | toArray | .[0] | toObject | .dbType)",
+      "version": "$(.db.output.data | toArray | .[0] | toObject | .dbVersion)"
+    },
+    "executors": [
+      {
+        "execute": "dblm-sapcp:GetDatabases:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "databases",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "applm-sapcp:GetDataSourceBindings:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "resourceName": "$(.execution.input.resourceName)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "dsBinding",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:JsonPath:1",
+        "input": {
+          "path": "$.[?(@.databaseId==\"$(.dsBinding.output.bindings | .[0] | toObject | .schemaID | toString)\")]",
+          "data": "$(.databases.output.databases | toString)"
+        },
+        "alias": "db",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "RA-<<<TENANT_ID>>>:FindDbSystemUsedByJavaApp:1",
+  "name": "FindDbSystemUsedByJavaApp",
+  "description": "Used to find the db system used by a java app based on the default datasource binding",
+  "catalog": "RA-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {
+    "password": {
+      "type": "string",
+      "sensitive": true,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "User's password used for authentication to SAP CP Neo APIs via basic authentication"
+    },
+    "resourceName": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Name of the SAP CP Neo database system, e.g. f45"
+    },
+    "region": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo region (as defined by Alert Notification Service), e.g. neo-eu1, neo-us1, etc."
+    },
+    "user": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Username used for authentication to SAP CP Neo APIs via basic authentication"
+    },
+    "subAccount": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo subaccount, e.g.: abc123456"
+    }
+  },
+  "outputKeys": {
+    "name": {
+      "type": "string",
+      "sensitive": false,
+      "description": "DB instance id / name, e.g. myappdb"
+    },
+    "type": {
+      "type": "string",
+      "sensitive": false,
+      "description": "DB's type, e.g. hana or ase"
+    },
+    "version": {
+      "type": "string",
+      "sensitive": false,
+      "description": "DB's version"
+    }
+  },
+  "tags": {
+    "env": "neo"
+  },
+  "issues": null
+}

@@ -1,0 +1,37 @@
+{
+  "id": "Automation-<<<TENANT_ID>>>:CFInstanceDetails:1",
+  "name": "CFInstanceDetails",
+  "description": "The details of an SAP HANA Cloud instance provisioned in Cloud Foundry",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "resourceGroup": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Cloud Foundry space name (dev)"
+    },
+    "resourceName": {
+      "type": "string",
+      "sensitive": false,
+      "description": "The name of an instance (HC_HDB_CF)"
+    },
+    "region": {
+      "type": "string",
+      "sensitive": false,
+      "description": "cf- value from API Endpoint (cf-us10-001)"
+    },
+    "subAccount": {
+      "type": "string",
+      "sensitive": false,
+      "description": "The Cloud Foundry org name (2fb68c96trial)"
+    }
+  },
+  "values": {
+    "resourceGroup": "dev",
+    "resourceName": "HC_HDB_CF",
+    "region": "cf-us10-001",
+    "subAccount": "2fb68c96trial"
+  },
+  "tags": {}
+}

@@ -1,0 +1,54 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "scriptInput",
+        "valueFrom": {
+          "inputReference": "welcome-<<<TENANT_ID>>>:WelcomeScriptInput:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "welcomeScriptOutput": "$(.welcomeScriptExecutor.output.output)"
+    },
+    "executors": [
+      {
+        "execute": "scripts-sapcp:ExecuteScript:1",
+        "input": {
+          "stdin": "$(.scriptInput.stdin | toBase64)",
+          "environment": "$(.scriptInput.environment)",
+          "parameters": "$(.scriptInput.parameters)",
+          "script": "IyEvdXNyL2Jpbi9lbnYgcGVybAoKbXkgJHN0ZGluID0gPFNURElOPjsKbXkgJGVudiA9ICRFTlZ7J0dSRUVUSU5HJ307IApteSAoJGFyZzEsICRhcmcyKSA9IEBBUkdWOwoKcHJpbnQoIiR7ZW52fSR7YXJnMX0gJHtzdGRpbn0ke2FyZzJ9XG4iKTsK"
+        },
+        "alias": "welcomeScriptExecutor",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:PerlScriptCommandExample:1",
+  "name": "PerlScriptCommandExample",
+  "description": "Example Perl script execution command",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "welcomeScriptOutput": {
+      "type": "string",
+      "sensitive": false,
+      "description": "welcomeScript output value"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

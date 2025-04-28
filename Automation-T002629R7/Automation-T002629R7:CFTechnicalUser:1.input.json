@@ -1,0 +1,25 @@
+{
+  "id": "Automation-<<<TENANT_ID>>>:CFTechnicalUser:1",
+  "name": "CFTechnicalUser",
+  "description": "A user that has space developer role in a Cloud Foundry space",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "password": {
+      "type": "string",
+      "sensitive": true,
+      "description": ""
+    },
+    "user": {
+      "type": "string",
+      "sensitive": false,
+      "description": "A Cloud Foundry user"
+    }
+  },
+  "values": {
+    "user": "",
+    "password": ""
+  },
+  "tags": {}
+}

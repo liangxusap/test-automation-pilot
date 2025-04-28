@@ -1,0 +1,7 @@
+{
+  "id": "welcome-<<<TENANT_ID>>>",
+  "technicalName": "welcome",
+  "name": "Welcome",
+  "description": "This catalog contains examples of basic commands",
+  "owner": "<<<TENANT_ID>>>"
+}

@@ -1,0 +1,54 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "scriptInput",
+        "valueFrom": {
+          "inputReference": "welcome-<<<TENANT_ID>>>:WelcomeScriptInput:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "welcomeScriptOutput": "$(.welcomeScriptExecutor.output.output)"
+    },
+    "executors": [
+      {
+        "execute": "scripts-sapcp:ExecuteScript:1",
+        "input": {
+          "stdin": "$(.scriptInput.stdin | toBase64)",
+          "environment": "$(.scriptInput.environment)",
+          "parameters": "$(.scriptInput.parameters)",
+          "script": "IyEvdXNyL2Jpbi9lbnYgbm9kZQoKY29uc3QgcmwgPSByZXF1aXJlKCdyZWFkbGluZScpLmNyZWF0ZUludGVyZmFjZSh7CiAgaW5wdXQ6IHByb2Nlc3Muc3RkaW4sCiAgb3V0cHV0OiBwcm9jZXNzLnN0ZG91dAp9KTsKCnJsLm9uKCdsaW5lJywgZnVuY3Rpb24gKHN0ZGluKSB7CiAgY29uc3QgZW52ID0gcHJvY2Vzcy5lbnYuR1JFRVRJTkc7CiAgY29uc3QgW2FyZzEsIGFyZzJdID0gcHJvY2Vzcy5hcmd2LnNsaWNlKDIsIDQpCgogIGNvbnNvbGUubG9nKGAke2Vudn0ke2FyZzF9ICR7c3RkaW59JHthcmcyfWApOwp9KTsK"
+        },
+        "alias": "welcomeScriptExecutor",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:NodeJsScriptCommandExample:1",
+  "name": "NodeJsScriptCommandExample",
+  "description": "Example Node.js script execution command",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "welcomeScriptOutput": {
+      "type": "string",
+      "sensitive": false,
+      "description": "welcomeScript output value"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

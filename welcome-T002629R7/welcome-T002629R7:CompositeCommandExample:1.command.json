@@ -1,0 +1,90 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "ApplicationsStatus",
+        "valueFrom": {
+          "inputReference": "welcome-<<<TENANT_ID>>>:ApplicationsStatus:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "transformedInput": "$(.filterApplications.output.data)"
+    },
+    "executors": [
+      {
+        "execute": "utils-sapcp:ForEach:1",
+        "input": {
+          "inputs": "$(.ApplicationsStatus.applications | toArray)",
+          "defaultValues": "{\"region\":\"neo-eu1\",\"subAccount\":\"ssfdd\"}",
+          "batchSize": "1",
+          "command": "welcome-<<<TENANT_ID>>>:ApplicationInputTransformer:1"
+        },
+        "alias": "foreach",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:JsonPath:1",
+        "input": {
+          "path": "$.[?(@.status == 'RUNNING')]",
+          "data": "$(.foreach.output.outputs | toString)"
+        },
+        "alias": "filterApplications",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:GetUserChoice:1",
+        "input": {
+          "options": "{\"signal_WaitToConfirmUpdateTask\":\"Confirm\", \"abort\":\"Abort\"}",
+          "title": "Is this expected result $(.filterApplications.output.data)"
+        },
+        "alias": "userChoice",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "welcome-<<<TENANT_ID>>>:CompositeCommandExample:1",
+  "name": "CompositeCommandExample",
+  "description": "Show composition of commands",
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "transformedInput": {
+      "type": "array",
+      "sensitive": false,
+      "description": "Transformed ApplicationStatus input"
+    }
+  },
+  "tags": {},
+  "issues": null
+}

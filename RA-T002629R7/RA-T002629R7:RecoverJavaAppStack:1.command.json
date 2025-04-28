@@ -1,0 +1,324 @@
+{
+  "configuration": {
+    "values": [],
+    "output": {
+      "dbHealthOverviewBeforeRecovery": "$(.recoverDbSystem.output.healthOverviewBeforeRecovery)",
+      "appHealthOverviewBeforeRecovery": "$(.recoverApp.output.healthOverviewBeforeRecovery)",
+      "dbRecoveryOperatorChoice": "$(.recoverDbSystem.output.operatorChoice)",
+      "appRecoveryOperatorChoice": "$(.recoverApp.output.operatorChoice)",
+      "shouldCheckDbHealthOperatorChoice": "$(.evaluateAppHealth.output.selection)",
+      "event": "$(.execution.input.event)"
+    },
+    "executors": [
+      {
+        "execute": "utils-sapcp:Void:1",
+        "input": {
+          "message": "doNothing"
+        },
+        "alias": "eliminateFalsePositives",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": {
+          "interval": "15s",
+          "when": null
+        },
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "RA-<<<TENANT_ID>>>:RecoverJavaApp:1",
+        "input": {
+          "clientId": "$(.execution.input.clientId)",
+          "resourceName": "$(.execution.input.resourceName)",
+          "clientSecret": "$(.execution.input.clientSecret)",
+          "region": "$(.execution.input.region)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "recoverApp",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "utils-sapcp:GetUserChoice:1",
+        "input": {
+          "options": "{\"problemResolved\":\"Problem Resolved - Do Nothing\", \"checkDbSystem\":\"Check DB System\"}",
+          "title": "Confirm the next steps, based on the app recovery actions! Details: $(.recoverApp.output.healthOverviewAfterRecovery)"
+        },
+        "alias": "evaluateAppHealth",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "RA-<<<TENANT_ID>>>:FindDbSystemUsedByJavaApp:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "resourceName": "$(.execution.input.resourceName)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "findDbSystem",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.evaluateAppHealth.output.selection)",
+                  "operator": "EQUALS",
+                  "semantic": "OR",
+                  "values": [
+                    "checkDbSystem"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      },
+      {
+        "execute": "RA-<<<TENANT_ID>>>:RecoverDbSystem:1",
+        "input": {
+          "password": "$(.execution.input.password)",
+          "clientId": "$(.execution.input.clientId)",
+          "resourceName": "$(.findDbSystem.output.name)",
+          "clientSecret": "$(.execution.input.clientSecret)",
+          "region": "$(.execution.input.region)",
+          "user": "$(.execution.input.user)",
+          "subAccount": "$(.execution.input.subAccount)"
+        },
+        "alias": "recoverDbSystem",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": {
+          "semantic": "OR",
+          "conditions": [
+            {
+              "semantic": "OR",
+              "cases": [
+                {
+                  "expression": "$(.evaluateAppHealth.output.selection)",
+                  "operator": "EQUALS",
+                  "semantic": "OR",
+                  "values": [
+                    "checkDbSystem"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "RA-<<<TENANT_ID>>>:RecoverJavaAppStack:1",
+  "name": "RecoverJavaAppStack",
+  "description": "Used to recover java application stack (java app + db system) on SAP CP Neo",
+  "catalog": "RA-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {
+    "password": {
+      "type": "string",
+      "sensitive": true,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "User's password used for authentication to SAP CP Neo APIs via basic authentication"
+    },
+    "clientId": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "SAP CP Neo Platform API oAuth 2.0 client id with read monitoring data scopes, e.g. e4bbc653-abef-375f-a681-c1dac12341234"
+    },
+    "resourceName": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Name of the SAP CP Neo database system, e.g. f45"
+    },
+    "clientSecret": {
+      "type": "string",
+      "sensitive": true,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "SAP CP Neo Platform API oAuth 2.0 client secret for the specified client id, e.g. abcdc1dac12341234"
+    },
+    "region": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo region (as defined by Alert Notification Service), e.g. neo-eu1, neo-us1, etc."
+    },
+    "event": {
+      "type": "string",
+      "sensitive": false,
+      "required": false,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Used to trace ANS alerts to triggered commands "
+    },
+    "user": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Username used for authentication to SAP CP Neo APIs via basic authentication"
+    },
+    "subAccount": {
+      "type": "string",
+      "sensitive": false,
+      "required": true,
+      "minSize": null,
+      "maxSize": null,
+      "minValue": null,
+      "maxValue": null,
+      "allowedValues": null,
+      "allowedValuesFromInputKeys": null,
+      "suggestedValues": null,
+      "suggestedValuesFromInputKeys": null,
+      "defaultValue": null,
+      "defaultValueFromInput": null,
+      "description": "Technical name of a SAP CP Neo subaccount, e.g.: abc123456"
+    }
+  },
+  "outputKeys": {
+    "dbHealthOverviewBeforeRecovery": {
+      "type": "string",
+      "sensitive": false,
+      "description": "DB's health before the recovery procedure"
+    },
+    "appHealthOverviewBeforeRecovery": {
+      "type": "string",
+      "sensitive": false,
+      "description": "App's health before the recovery procedure"
+    },
+    "dbRecoveryOperatorChoice": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Operator's decision if DB recovery is required"
+    },
+    "appRecoveryOperatorChoice": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Operator's decision if App recovery is required"
+    },
+    "shouldCheckDbHealthOperatorChoice": {
+      "type": "string",
+      "sensitive": false,
+      "description": "Operator's decision if DB health shall be checked at all"
+    },
+    "event": {
+      "type": "string",
+      "sensitive": false,
+      "description": "[Optional] ANS' origin event payload which triggered the command"
+    }
+  },
+  "tags": {
+    "env": "neo"
+  },
+  "issues": null
+}

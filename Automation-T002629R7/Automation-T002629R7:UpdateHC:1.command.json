@@ -1,0 +1,61 @@
+{
+  "configuration": {
+    "values": [
+      {
+        "alias": "InstanceDetails",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:InstanceDetails:1",
+          "inputKey": null
+        }
+      },
+      {
+        "alias": "description",
+        "valueFrom": {
+          "inputReference": "Automation-<<<TENANT_ID>>>:Description:1",
+          "inputKey": null
+        }
+      }
+    ],
+    "output": {
+      "CommandOutput": "$(.update.output.serviceInstance)"
+    },
+    "executors": [
+      {
+        "execute": "sm-sapcp:UpdateServiceInstance:1",
+        "input": {
+          "instanceId": "$(.InstanceDetails.instanceId)",
+          "displayName": "$(.InstanceDetails.instanceName)",
+          "serviceKey": "$(.InstanceDetails.smBindingKey)",
+          "parameters": "$(.description.parameters)"
+        },
+        "alias": "update",
+        "description": null,
+        "progressMessage": null,
+        "initialDelay": null,
+        "pause": null,
+        "when": null,
+        "validate": null,
+        "autoRetry": null,
+        "repeat": null,
+        "errorMessages": [],
+        "dryRun": null
+      }
+    ],
+    "listeners": []
+  },
+  "id": "Automation-<<<TENANT_ID>>>:UpdateHC:1",
+  "name": "UpdateHC",
+  "description": "Update the description of an SAP HANA Cloud instance provisioned to an SAP BTP subaccount",
+  "catalog": "Automation-<<<TENANT_ID>>>",
+  "version": 1,
+  "inputKeys": {},
+  "outputKeys": {
+    "CommandOutput": {
+      "type": "string",
+      "sensitive": false,
+      "description": ""
+    }
+  },
+  "tags": {},
+  "issues": null
+}

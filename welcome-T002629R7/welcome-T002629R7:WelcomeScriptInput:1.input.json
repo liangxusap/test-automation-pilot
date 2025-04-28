@@ -1,0 +1,31 @@
+{
+  "id": "welcome-<<<TENANT_ID>>>:WelcomeScriptInput:1",
+  "name": "WelcomeScriptInput",
+  "description": null,
+  "catalog": "welcome-<<<TENANT_ID>>>",
+  "owner": null,
+  "version": 1,
+  "keys": {
+    "environment": {
+      "type": "object",
+      "sensitive": false,
+      "description": null
+    },
+    "stdin": {
+      "type": "string",
+      "sensitive": false,
+      "description": null
+    },
+    "parameters": {
+      "type": "array",
+      "sensitive": false,
+      "description": null
+    }
+  },
+  "values": {
+    "environment": "{\"GREETING\": \"Hello\"}",
+    "stdin": "World",
+    "parameters": "[\",\",\"!\"]"
+  },
+  "tags": {}
+}
