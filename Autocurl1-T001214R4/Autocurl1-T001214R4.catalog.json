@@ -1,0 +1,9 @@
+{
+  "id": "Autocurl1-<<<TENANT_ID>>>",
+  "technicalName": "Autocurl1",
+  "name": "Automation1curl",
+  "description": "curl api call created - api call 1st",
+  "owner": "<<<TENANT_ID>>>",
+  "inputs": [],
+  "commands": []
+}

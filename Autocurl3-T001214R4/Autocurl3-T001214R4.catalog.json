@@ -1,0 +1,54 @@
+{
+  "id": "Autocurl3-<<<TENANT_ID>>>",
+  "technicalName": "Autocurl3",
+  "name": "Automation3curl",
+  "description": "curl api call created - api call 2st round",
+  "owner": "<<<TENANT_ID>>>",
+  "inputs": [
+    {
+      "id": "Autocurl3-<<<TENANT_ID>>>:CFInstanceDetails:1",
+      "name": "CFInstanceDetails",
+      "description": "The details of an SAP HANA Cloud instance provisioned in Cloud Foundry",
+      "catalog": "Autocurl3-<<<TENANT_ID>>>",
+      "owner": null,
+      "version": 1,
+      "keys": {
+        "resourceGroup": {
+          "type": "string",
+          "sensitive": false,
+          "description": "Cloud Foundry space name (dev)"
+        }
+      },
+      "values": {
+        "resourceGroup": "dev"
+      },
+      "tags": {}
+    },
+    {
+      "id": "Autocurl3-<<<TENANT_ID>>>:CFTechnicalUser:1",
+      "name": "CFTechnicalUser",
+      "description": "A user that has space developer role in a Cloud Foundry space",
+      "catalog": "Autocurl3-<<<TENANT_ID>>>",
+      "owner": null,
+      "version": 1,
+      "keys": {
+        "password": {
+          "type": "string",
+          "sensitive": true,
+          "description": ""
+        },
+        "user": {
+          "type": "string",
+          "sensitive": false,
+          "description": "A Cloud Foundry user"
+        }
+      },
+      "values": {
+        "user": "",
+        "password": ""
+      },
+      "tags": {}
+    }
+  ],
+  "commands": []
+}
