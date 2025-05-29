@@ -240,8 +240,7 @@
       "version": 1,
       "inputKeys": {},
       "outputKeys": {},
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -304,8 +303,7 @@
       "version": 1,
       "inputKeys": {},
       "outputKeys": {},
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -460,8 +458,7 @@
           "description": null
         }
       },
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -544,8 +541,7 @@
           "description": null
         }
       },
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -596,8 +592,7 @@
           "description": "Instance parameters"
         }
       },
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -727,8 +722,7 @@
       },
       "tags": {
         "feature:priority": "medium"
-      },
-      "issues": null
+      }
     },
     {
       "configuration": {
@@ -812,8 +806,7 @@
           "description": null
         }
       },
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -865,8 +858,7 @@
       "version": 1,
       "inputKeys": {},
       "outputKeys": {},
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -918,8 +910,7 @@
       "version": 1,
       "inputKeys": {},
       "outputKeys": {},
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -979,8 +970,7 @@
           "description": ""
         }
       },
-      "tags": {},
-      "issues": null
+      "tags": {}
     },
     {
       "configuration": {
@@ -1117,8 +1107,7 @@
           "description": null
         }
       },
-      "tags": {},
-      "issues": null
+      "tags": {}
     }
   ]
 }
