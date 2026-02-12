@@ -4,6 +4,7 @@
   "name": "Automation2curl",
   "description": "curl api call created - api call 2st round",
   "owner": "<<<TENANT_ID>>>",
+  "tags": {},
   "inputs": [],
   "commands": []
 }
